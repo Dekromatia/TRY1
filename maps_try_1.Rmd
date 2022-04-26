@@ -1,0 +1,30 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+#ПРОБНАЯ ВЕРСИЯ КАРТЫ
+```{r message=FALSE, include=FALSE}
+library(tidyverse)
+library(leaflet)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = TRUE )
+``` 
+```{r message=FALSE, include=TRUE, fig.asp = 0.9, fig.width = 10, out.width = '100%'}
+map <- read.csv2("https://raw.githubusercontent.com/Dekromatia/Maps/main/map.csv", stringsAsFactors = FALSE,
+                 encoding = "UTF-8")
+
+pal <- colorFactor(c("red", "navy"), domain = c("production", "find"))
+
+map%>%
+leaflet() %>%
+  addProviderTiles("Stamen.Watercolor")%>%
+  addCircleMarkers(lng = ~latitude,
+                   lat = ~longitude,
+                   label = ~location,
+                   radius = ~ifelse(place_of == "production", 9, 12),
+                   color = ~pal(place_of),
+                   stroke = FALSE, fillOpacity = 0.9) %>% 
+    addLegend(pal = pal,
+            values = ~place_of,
+            title = "amphorae")
+```  
