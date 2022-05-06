@@ -9,15 +9,15 @@ library(tidyverse)
 library(leaflet)
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = TRUE )
 ``` 
-```{r message=FALSE, include=TRUE, fig.asp = 0.9, fig.width = 10, out.width = '100%'}
-map <- read.csv2("https://raw.githubusercontent.com/Dekromatia/Maps/main/map.csv", stringsAsFactors = FALSE,
+```{r message=FALSE, include=TRUE, fig.asp = 1, fig.width = 10, out.width = '100%'}
+map <- read.csv2("https://raw.githubusercontent.com/Dekromatia/TRY1/main/map.csv", stringsAsFactors = FALSE,
                  encoding = "UTF-8")
 
 pal <- colorFactor(c("red", "navy"), domain = c("production", "find"))
 
 map%>%
 leaflet() %>%
-  addProviderTiles("Stamen.Watercolor")%>%
+  addProviderTiles("Esri.WorldShadedRelief")%>%
   addCircleMarkers(lng = ~latitude,
                    lat = ~longitude,
                    label = ~location,
