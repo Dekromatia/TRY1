@@ -1,0 +1,41 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+#ПРОБНАЯ ВЕРСИЯ КАРТЫ
+```{r message=FALSE, include=FALSE}
+library(tidyverse)
+library(leaflet)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = TRUE )
+``` 
+```{r message=FALSE, include=FALSE, fig.asp = 1, fig.dim = c(8, 6), out.width = '100%'}
+map <- read.csv2("https://raw.githubusercontent.com/Dekromatia/TRY1/main/map.csv", stringsAsFactors = FALSE,
+                 encoding = "UTF-8")
+
+pal <- colorFactor(c("red", "navy"), domain = c("production", "find"))
+
+amphorae_map <- map%>%
+leaflet() %>%
+  addProviderTiles("Esri.WorldShadedRelief")%>%
+  addCircleMarkers(lng = ~latitude,
+                   lat = ~longitude,
+                   label = ~location,
+                   labelOptions = labelOptions(noHide = T, 
+                                               textOnly = TRUE,
+                                               direction ="right",
+                                               offset = c(10, 1),
+                                                zoomAnimation = 5,
+                                               style = list("color" = "rgb(41,41,41)",
+                                                            "font-style" = "arial",
+                                                            "font-size" = "17px")),
+                   radius = ~ifelse(place_of == "production", 6, 7),
+                   color = ~pal(place_of),
+                   stroke = FALSE, fillOpacity = 0.9)%>%
+  addLegend(pal = pal,
+            values = ~place_of,
+            title = "amphorae")
+```  
+```{r message=FALSE, include=TRUE, fig.asp = 1, fig.dim = c(10, 7), out.width = '100%'}
+amphorae_map
+``` 
